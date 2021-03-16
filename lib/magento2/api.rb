@@ -7,11 +7,51 @@ module Magento2::Api
   class << self
 
     def configure(consumer_key, consumer_secret, access_token, access_token_secret, host)
-      @consumer_key = consumer_key
-      @consumer_secret = consumer_secret
-      @access_token = access_token
-      @access_token_secret = access_token_secret
-      @host = host
+      self.consumer_key = consumer_key
+      self.consumer_secret = consumer_secret
+      self.access_token = access_token
+      self.access_token_secret = access_token_secret
+      self.host = host
+    end
+
+    def consumer_key
+      RequestStore.store[:magento2_consumer_key]
+    end
+
+    def consumer_key=(value)
+      RequestStore.store[:magento2_consumer_key] = value
+    end
+
+    def consumer_secret
+      RequestStore.store[:magento2_consumer_secret]
+    end
+
+    def consumer_secret=(value)
+      RequestStore.store[:magento2_consumer_secret] = value
+    end
+
+    def access_token
+      RequestStore.store[:magento2_access_token]
+    end
+
+    def access_token=(value)
+      RequestStore.store[:magento2_access_token] = value
+    end
+
+    def access_token_secret
+      RequestStore.store[:magento2_access_token_secret]
+    end
+
+    def access_token_secret=(value)
+      RequestStore.store[:magento2_access_token_secret] = value
+    end
+
+    def host
+      RequestStore.store[:magento2_host]
+    end
+
+    def host=(value)
+      RequestStore.store[:magento2_host] = value
     end
 
     def get(url, query = {})
