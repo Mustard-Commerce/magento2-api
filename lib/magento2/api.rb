@@ -55,7 +55,7 @@ module Magento2::Api
     end
 
     def get(url, query = {})
-        url = "#{@host}#{url}"
+        url = "#{self.host}#{url}"
         http = Curl.get(url, query) do |http|
             http.headers['Content-type'] = "application/json"
             http.headers['Authorization'] = auth('GET', url, query)
@@ -65,7 +65,7 @@ module Magento2::Api
     end
 
     def delete(url)
-        url = "#{@host}#{url}"
+        url = "#{self.host}#{url}"
         http = Curl.delete(url) do |http|
             http.headers['Content-type'] = "application/json"
             http.headers['Authorization'] = auth('DELETE', url)
@@ -75,7 +75,7 @@ module Magento2::Api
     end
 
     def post(url, body)
-        url = "#{@host}#{url}"
+        url = "#{self.host}#{url}"
         http = Curl.post(url, body.to_json) do |http|
             http.headers['Content-type'] = "application/json"
             http.headers['Authorization'] = auth('POST', url)
@@ -85,7 +85,7 @@ module Magento2::Api
     end
 
     def put(url, body)
-        url = "#{@host}#{url}"
+        url = "#{self.host}#{url}"
         http = Curl.put(url, body.to_json) do |http|
             http.headers['Content-type'] = "application/json"
             http.headers['Authorization'] = auth('PUT', url)
@@ -98,14 +98,14 @@ module Magento2::Api
 
     def auth(method, url, query = {})
         data = {
-            'oauth_consumer_key' => @consumer_key,
+            'oauth_consumer_key' => self.consumer_key,
             'oauth_nonce' => Digest::MD5.hexdigest(Random.new.rand.to_s),
             'oauth_signature_method' => 'HMAC-SHA1',
             'oauth_timestamp' => Time.new.to_i,
-            'oauth_token' => @access_token,
+            'oauth_token' => self.access_token,
             'oauth_version' => '1.0'
         }.merge!(query)
-        data['oauth_signature'] = sign(method, url, data, @consumer_secret, @access_token_secret)
+        data['oauth_signature'] = sign(method, url, data, self.consumer_secret, self.access_token_secret)
         authorization = "OAuth #{http_build_query(data, ',')}"
     end 
 
