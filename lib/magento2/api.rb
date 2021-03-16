@@ -97,6 +97,7 @@ module Magento2::Api
     private
 
     def auth(method, url, query = {})
+      if self.consumer_key.present? and self.consumer_secret.present? and self.access_token_secret.present?
         data = {
             'oauth_consumer_key' => self.consumer_key,
             'oauth_nonce' => Digest::MD5.hexdigest(Random.new.rand.to_s),
@@ -107,7 +108,12 @@ module Magento2::Api
         }.merge!(query)
         data['oauth_signature'] = sign(method, url, data, self.consumer_secret, self.access_token_secret)
         authorization = "OAuth #{http_build_query(data, ',')}"
-    end 
+      else
+        authorization = "Bearer #{self.access_token}"        
+      end
+
+      return authorization
+    end
 
     def urlEncodeAsZend(value)
         ERB::Util.url_encode(value).gsub('%7E', '~')
